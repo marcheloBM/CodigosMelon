@@ -29,4 +29,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.sqlite:sqlite:2.3.1")
     implementation("com.google.android.material:material:1.11.0")
+    implementation(libs.androidx.monitor)
+    implementation(libs.androidx.junit.ktx)
+    testImplementation(kotlin("test"))
 }

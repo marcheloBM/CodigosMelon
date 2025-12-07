@@ -1,39 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:context=".MainActivity">
 
+    <!-- Campo Código -->
     <EditText
         android:id="@+id/etCodigo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Código" />
 
+    <!-- Campo Nombre -->
     <EditText
         android:id="@+id/etNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nombre" />
 
+    <!-- Botones CRUD -->
     <Button
         android:id="@+id/btnInsertar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Insertar" />
+        android:text="INSERTAR" />
 
     <Button
         android:id="@+id/btnBuscar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Buscar por código" />
-    <TextView
-        android:id="@+id/tvResultado"
+        android:text="BUSCAR POR CÓDIGO" />
+
+    <Button
+        android:id="@+id/btnEditar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Resultado:"
-        android:textSize="16sp"
+        android:text="EDITAR" />
+
+    <Button
+        android:id="@+id/btnEliminar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ELIMINAR" />
+
+    <!-- RecyclerView para mostrar productos -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvProductos"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:paddingTop="16dp" />
 
 </LinearLayout>

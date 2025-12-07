@@ -3,12 +3,8 @@ package com.Burgos.codigosmelon
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import android.util.Log
-import android.widget.Toast
 
-
-class ProductoDAO(private val context: Context) {
-
+class ProductoDAO(context: Context) {
     private val dbHelper = DBHelper(context)
 
     fun insertar(codigo: String, nombre: String) {
@@ -28,29 +24,15 @@ class ProductoDAO(private val context: Context) {
             null,
             "${DBHelper.COL_CODIGO} = ?",
             arrayOf(codigo),
-            null, null, null
+            null,
+            null,
+            null
         )
     }
 
     fun listarTodos(): Cursor {
         val db = dbHelper.readableDatabase
-        return db.query(
-            DBHelper.TABLE_NAME,
-            null,
-            null, null, null, null,
-            "${DBHelper.COL_ID} ASC"
-        )
-    }
-
-    fun eliminar(codigo: String): Int {
-        val db = dbHelper.writableDatabase
-        val filas = db.delete(
-            DBHelper.TABLE_NAME,
-            "${DBHelper.COL_CODIGO} = ?",
-            arrayOf(codigo)
-        )
-        db.close()
-        return filas
+        return db.query(DBHelper.TABLE_NAME, null, null, null, null, null, null)
     }
 
     fun editar(codigo: String, nuevoNombre: String): Int {
@@ -61,6 +43,17 @@ class ProductoDAO(private val context: Context) {
         val filas = db.update(
             DBHelper.TABLE_NAME,
             values,
+            "${DBHelper.COL_CODIGO} = ?",
+            arrayOf(codigo)
+        )
+        db.close()
+        return filas
+    }
+
+    fun eliminar(codigo: String): Int {
+        val db = dbHelper.writableDatabase
+        val filas = db.delete(
+            DBHelper.TABLE_NAME,
             "${DBHelper.COL_CODIGO} = ?",
             arrayOf(codigo)
         )

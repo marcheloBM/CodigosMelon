@@ -34,7 +34,7 @@ class ProductoAdapter(
         }
 
         holder.itemView.setOnLongClickListener {
-            onEliminar(producto)
+            onEliminar(producto) // solo notifica
             true
         }
     }

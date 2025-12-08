@@ -29,6 +29,18 @@ class ProductoDAO(context: Context) {
             null
         )
     }
+    fun buscarPorNombre(nombre: String): Cursor {
+        val db = dbHelper.readableDatabase
+        return db.query(
+            DBHelper.TABLE_NAME,
+            null,
+            "${DBHelper.COL_NOMBRE} LIKE ?",
+            arrayOf("%$nombre%"),
+            null,
+            null,
+            null
+        )
+    }
 
     fun listarTodos(): Cursor {
         val db = dbHelper.readableDatabase

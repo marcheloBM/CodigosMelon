@@ -11,7 +11,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(
     DATABASE_VERSION
 ) {
     companion object {
-        const val DATABASE_NAME = "productos.db"
+        const val DATABASE_NAME = "Codigos.db"
         const val DATABASE_VERSION = 2   // ⚠️ Incrementa solo si cambias la estructura
         const val TABLE_NAME = "productos"
         const val COL_ID = "id"

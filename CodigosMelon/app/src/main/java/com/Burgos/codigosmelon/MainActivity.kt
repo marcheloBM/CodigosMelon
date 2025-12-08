@@ -29,6 +29,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Verificar actualización al iniciar
+        UpdateChecker.checkForUpdate(this)
+
         dao = ProductoDAO(this)
 
         etCodigo = findViewById(R.id.etCodigo)

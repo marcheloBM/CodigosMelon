@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.widget.SearchView
+import android.content.ContentValues
+import android.database.sqlite.SQLiteDatabase
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     private var listaProductos: MutableList<Producto> = mutableListOf()
     private lateinit var adapter: ProductoAdapter
     private lateinit var emptyView: LinearLayout
+    private lateinit var dbHelper: DBHelper
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +55,28 @@ class MainActivity : AppCompatActivity() {
         btnEditar.visibility = View.GONE
         btnEliminar.visibility = View.GONE
 
-        listarTodos()
+        dbHelper = DBHelper(this)
+        val prefs = getSharedPreferences("config", MODE_PRIVATE)
+        val yaPreguntado = prefs.getBoolean("pregunta_mostrada", false)
+
+        if (!yaPreguntado) {
+            AlertDialog.Builder(this)
+                .setTitle("Importar datos")
+                .setMessage("¿Desea importar los datos desde el archivo CSV?")
+                .setPositiveButton("Sí") { _, _ ->
+                    importarCSVUnaVez()
+                    prefs.edit().putBoolean("pregunta_mostrada", true).apply()
+                    listarTodos()
+                }
+                .setNegativeButton("No") { _, _ ->
+                    prefs.edit().putBoolean("pregunta_mostrada", true).apply()
+                    listarTodos()
+                }
+                .setCancelable(false)
+                .show()
+        }
+
+        //listarTodos()
 
         // Insertar
         btnInsertar.setOnClickListener {
@@ -204,6 +230,89 @@ class MainActivity : AppCompatActivity() {
                 )
                 emptyView.visibility = View.GONE      // ocultar mensaje cuando hay resultados
             }
+        }
+    }
+
+    private fun importarCSVUnaVez() {
+        try {
+            val prefs = getSharedPreferences("config", MODE_PRIVATE)
+            val yaImportado = prefs.getBoolean("csv_importado", false)
+
+            if (!yaImportado) {
+                val db = dbHelper.writableDatabase
+                val inputStream = assets.open("productos.csv")
+                val reader = inputStream.bufferedReader()
+
+                reader.readLine() // Saltar encabezado
+
+                var insertados = 0
+                var actualizados = 0
+
+                // 🚀 Iniciar transacción
+                db.beginTransaction()
+                try {
+                    reader.forEachLine { line ->
+                        val parts = line.split(";") // ← separador punto y coma
+                        if (parts.size >= 2) {
+                            val codigo = parts[0].trim()
+                            val nombre = parts[1].trim()
+
+                            // 🔍 Verificar si el código ya existe
+                            val cursor = db.query(
+                                DBHelper.TABLE_NAME,
+                                arrayOf(DBHelper.COL_CODIGO),
+                                "${DBHelper.COL_CODIGO} = ?",
+                                arrayOf(codigo),
+                                null, null, null
+                            )
+
+                            val existe = cursor.moveToFirst()
+                            cursor.close()
+
+                            if (!existe) {
+                                // Insertar nuevo
+                                val values = ContentValues().apply {
+                                    put(DBHelper.COL_CODIGO, codigo)
+                                    put(DBHelper.COL_NOMBRE, nombre)
+                                }
+                                val resultado = db.insert(DBHelper.TABLE_NAME, null, values)
+                                if (resultado != -1L) insertados++
+                            } else {
+                                // Actualizar nombre si ya existe
+                                val values = ContentValues().apply {
+                                    put(DBHelper.COL_NOMBRE, nombre)
+                                }
+                                val filas = db.update(
+                                    DBHelper.TABLE_NAME,
+                                    values,
+                                    "${DBHelper.COL_CODIGO} = ?",
+                                    arrayOf(codigo)
+                                )
+                                if (filas > 0) actualizados++
+                            }
+                        }
+                    }
+
+                    // 🚀 Confirmar transacción
+                    db.setTransactionSuccessful()
+                } finally {
+                    db.endTransaction()
+                }
+
+                reader.close()
+                db.close()
+
+                prefs.edit().putBoolean("csv_importado", true).apply()
+
+                Toast.makeText(
+                    this,
+                    "Insertados: $insertados • Actualizados: $actualizados",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error al importar CSV: ${e.message}", Toast.LENGTH_LONG).show()
+            e.printStackTrace()
         }
     }
 }

@@ -11,8 +11,9 @@
         android:id="@+id/etCodigo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Código"
+        android:hint="@string/codigo"
         android:inputType="text"
+        android:autofillHints="name"
         android:layout_marginBottom="8dp"/>
 
     <!-- Campo Nombre -->
@@ -20,9 +21,15 @@
         android:id="@+id/etNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre"
-        android:inputType="text"
-        android:layout_marginBottom="16dp"/>
+        android:hint="@string/nombre"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:maxLines="10"
+        android:gravity="top"
+        android:textColor="@android:color/black"
+        android:background="@android:color/white"
+        android:autofillHints="name"
+        android:padding="8dp" />
 
     <!-- Botón Insertar -->
     <com.google.android.material.button.MaterialButton
@@ -30,7 +37,7 @@
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="INSERTAR"
+        android:text="@string/insertar"
         app:cornerRadius="12dp"
         app:backgroundTint="@color/purple_500"
         android:layout_marginBottom="8dp"/>
@@ -50,7 +57,7 @@
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="EDITAR"
+        android:text="@string/editar"
         app:cornerRadius="12dp"
         app:backgroundTint="@color/purple_700"
         android:layout_marginBottom="8dp"/>
@@ -61,7 +68,7 @@
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ELIMINAR"
+        android:text="@string/eliminar"
         app:cornerRadius="12dp"
         app:backgroundTint="@color/teal_200"
         android:layout_marginBottom="16dp"/>
@@ -78,21 +85,25 @@
 
         <ImageView
             android:id="@+id/imgEmpty"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:src="@drawable/ic_empty_box"
-            android:contentDescription="Sin resultados"
-            android:tint="@android:color/darker_gray"
+            android:contentDescription="@string/Sin_resultados"
+            app:tint="@android:color/darker_gray"
             android:layout_marginBottom="8dp"/>
 
         <TextView
             android:id="@+id/tvEmpty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No se encontraron resultados"
+            android:text="@string/No_encontraron_resultados"
             android:textSize="16sp"
             android:textColor="@android:color/darker_gray"
-            android:gravity="center"/>
+            android:gravity="center"
+            app:drawableTopCompat="@drawable/ic_empty_box"
+            android:drawablePadding="8dp"
+            android:padding="16dp"
+            android:visibility="gone"/>
     </LinearLayout>
 
     <!-- RecyclerView -->

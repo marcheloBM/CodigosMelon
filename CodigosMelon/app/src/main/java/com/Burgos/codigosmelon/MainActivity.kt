@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                 .show()
         }
 
-        //listarTodos()
+        listarTodos()
 
         // Insertar
         btnInsertar.setOnClickListener {

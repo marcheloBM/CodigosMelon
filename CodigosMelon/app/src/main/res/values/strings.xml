@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Codigos Melon</string>
+    <string name="codigo">Código</string>
+    <string name="nombre">Nombre</string>
+    <string name="insertar">INSERTAR</string>
+    <string name="editar">EDITAR</string>
+    <string name="eliminar">ELIMINAR</string>
+    <string name="Sin_resultados">Sin resultados</string>
+    <string name="No_encontraron_resultados">No se encontraron resultados</string>
 </resources>
